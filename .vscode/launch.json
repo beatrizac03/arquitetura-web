@@ -9,6 +9,16 @@
             "projectName": "webservice",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CrudApplication<crud>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.pratica03.crud.CrudApplication",
+            "projectName": "crud",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
