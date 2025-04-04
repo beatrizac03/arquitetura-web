@@ -1,10 +1,10 @@
-package com.mongodb.project;
+package com.mvc.tarefas;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ProjectApplicationTests {
+class TarefasApplicationTests {
 
 	@Test
 	void contextLoads() {
