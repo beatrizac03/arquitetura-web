@@ -8,10 +8,10 @@
 		<version>3.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.pratica03</groupId>
-	<artifactId>crud</artifactId>
+	<groupId>com.pratica01</groupId>
+	<artifactId>api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>crud</name>
+	<name>api</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
