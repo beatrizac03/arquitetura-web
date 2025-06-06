@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "UsuarioApplication",
+            "request": "launch",
+            "mainClass": "com.cadastro.usuario.UsuarioApplication",
+            "projectName": "usuario"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-WebserviceApplication<webservice>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
