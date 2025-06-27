@@ -80,6 +80,7 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/produtos").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
                         .anyRequest().authenticated())
                 .headers(headers -> headers.frameOptions(frameOptions -> headers.frameOptions().sameOrigin()))
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
