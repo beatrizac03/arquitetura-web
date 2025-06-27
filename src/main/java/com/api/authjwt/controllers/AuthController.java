@@ -1,5 +1,6 @@
 package com.api.authjwt.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.api.authjwt.DTOs.UsuarioRequestDto;
 import com.api.authjwt.config.JwtService;
 import com.api.authjwt.services.AuthService;
 
@@ -20,35 +24,48 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/auth")
 @Tag(name = "Autenticação", description = "Endpoints para login e geração/validação de tokens JWT")
 public class AuthController {
-    private final AuthService authService;
-    private final JwtService jwtService;
+    @Autowired
+    private AuthService authService;
 
-    public AuthController(AuthService authService, JwtService jwtService) {
-        this.authService = authService;
-        this.jwtService = jwtService;
-    }
+    @Autowired
+    private JwtService jwtService;
 
     @Operation(summary = "Realiza o login do usuário e emite um token JWT")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Login bem-sucedido, retorna o token JWT"),
-        @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
+            @ApiResponse(responseCode = "200", description = "Login bem-sucedido, retorna o token JWT"),
+            @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
     })
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<String> login(@RequestBody UsuarioRequestDto dto) {
         try {
-            String token = authService.authenticateUserAndGenerateToken(username, password);
+            String token = authService.authenticateUserAndGenerateToken(dto.getUsername(), dto.getPassword());
             return ResponseEntity.ok(token);
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro interno ao tentar logar.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocorreu um erro interno ao tentar logar.");
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody UsuarioRequestDto dto) {
+        try {
+            String token = authService.registerUserAndGenerateToken(dto);
+            return ResponseEntity.ok(token);
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace(); // <== imprime erro completo no console
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno: " + e.getMessage());
         }
     }
 
     @Operation(summary = "Valida um token JWT (útil para debug e verificação externa)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Token válido"),
-        @ApiResponse(responseCode = "401", description = "Token inválido ou expirado")
+            @ApiResponse(responseCode = "200", description = "Token válido"),
+            @ApiResponse(responseCode = "401", description = "Token inválido ou expirado")
     })
     @PostMapping("/validate")
     public ResponseEntity<String> validateToken(@RequestParam String token) {

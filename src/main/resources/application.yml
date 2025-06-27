@@ -7,13 +7,13 @@ server:
 # 🗄️ Configurações do Banco de Dados H2
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE 
+    url: jdbc:h2:file:./data/easybuydb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
     username: sa
     password:
   h2:
     console:
-      enabled: true # Habilita o console do H2
+      enabled: true
       path: /h2-console # Acesse em http://localhost:8080/h2-console
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
@@ -24,7 +24,7 @@ spring:
       hibernate:
         format_sql: true # Formata o SQL para melhor legibilidade no console
 
-# 🛠️ Spring DevTools: Otimizando o Desenvolvimento
+  # 🛠️ Spring DevTools: Otimizando o Desenvolvimento
   devtools:
     restart:
       enabled: true # Reinicia a app automaticamente ao detectar mudanças no código
@@ -44,3 +44,16 @@ springdoc:
     disable-swagger-default-url: true # Evita carregar a URL padrão do Swagger (Petstore)
   api-docs:
     path: /v3/api-docs # Caminho para os arquivos de definição da API (JSON/YAML)
+
+management:
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    prometheus:
+      enabled: true

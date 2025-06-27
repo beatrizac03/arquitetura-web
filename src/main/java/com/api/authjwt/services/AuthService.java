@@ -2,11 +2,14 @@ package com.api.authjwt.services;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.api.authjwt.DTOs.UsuarioRequestDto;
 import com.api.authjwt.config.JwtService;
+import com.api.authjwt.mappers.UsuarioMapper;
 import com.api.authjwt.models.Usuario;
 import com.api.authjwt.repositories.UsuarioRepository;
 
@@ -16,6 +19,9 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService; // Injeta o serviço de JWT
 
+    @Autowired
+    private UsuarioMapper usuarioMapper;
+
     public AuthService(UsuarioRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -24,6 +30,7 @@ public class AuthService {
 
     /**
      * Autentica um usuário e, se bem-sucedido, gera e retorna um token JWT.
+     * 
      * @param username Nome de usuário.
      * @param password Senha em texto claro.
      * @return O token JWT.
@@ -43,5 +50,15 @@ public class AuthService {
         }
 
         return jwtService.generateToken(user.getUsername(), user.getRole());
+    }
+
+    public String registerUserAndGenerateToken(UsuarioRequestDto dto) {
+
+        Usuario usuario = usuarioMapper.toEntity(dto);
+        usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        userRepository.save(usuario);
+
+        return jwtService.generateToken(usuario.getUsername(), usuario.getRole());
     }
 }

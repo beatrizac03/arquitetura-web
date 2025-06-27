@@ -1,0 +1,130 @@
+/* Reset básico */
+:root {
+  --white: white;
+  --offwhite: #f8fafc;
+  --black: #333333;
+  --green: #28a745;
+  --gray: #f4f4f4;
+  --blue: #007bff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: var(--blue);
+}
+
+.login-container {
+  background: var(--offwhite);
+  padding: 40px 50px;
+  border-radius: 12px;
+  width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+    /* sombra sutil mais próxima */ 0 8px 16px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.login-container h2 {
+  margin-bottom: 30px;
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--blue); /* verde vibrante */
+  letter-spacing: 2px;
+}
+
+.input-group {
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--blue);
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1.5px solid var(--blue);
+  background: #0b0f0a;
+  color: #b6f27e;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #7de044;
+  box-shadow: 0 0 8px #7de044aa;
+}
+
+button {
+  width: 100%;
+  padding: 14px 0;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #4db71a, #79d22e);
+  color: #0b0f0a;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #79d22e, #4db71a);
+}
+
+.footer {
+  margin-top: 18px;
+  font-size: 13px;
+  color: #4a6a33;
+}
+
+select {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1.5px solid var(--blue);
+  background-color: #0b0f0a;
+  color: #b6f27e;
+  font-size: 16px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23b6f27e' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: #7de044;
+  box-shadow: 0 0 8px #7de044aa;
+}
+
+/* Mobile responsivo */
+@media (max-width: 400px) {
+  .login-container {
+    width: 90vw;
+    padding: 30px 20px;
+  }
+}

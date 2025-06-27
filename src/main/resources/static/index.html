@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <title>EasyBuy</title>
+  </head>
+  <body>
+    <div class="login-container" role="main" aria-label="Formulário de login">
+      <h2>Login</h2>
+
+      <form class="form-login">
+        <div class="input-group">
+          <label for="username">Usuário</label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            placeholder="Digite seu usuário"
+            required
+            autocomplete="username"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="password">Senha</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Digite sua senha"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+
+        <button type="submit" aria-label="Entrar">Entrar</button>
+      </form>
+
+      <div class="footer">© 2025 EasyBuy</div>
+    </div>
+
+    <script type="module">
+      import { logarUsuario } from "./script.js";
+      const form = document.querySelector(".form-login");
+
+      async function enviarDados() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const credentials = {
+          username,
+          password,
+        };
+
+        try {
+          const authToken = await logarUsuario(credentials);
+          sessionStorage.setItem("authToken", authToken);
+          console.log("Usuário logado com sucesso!");
+        } catch (error) {
+          console.error("Erro ao logar:", error);
+          alert("Usuário ou senha inválidos");
+        }
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        enviarDados();
+      });
+    </script>
+  </body>
+</html>

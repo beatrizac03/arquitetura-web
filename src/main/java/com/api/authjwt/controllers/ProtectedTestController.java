@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Recursos Protegidos", description = "Endpoints que exigem autenticação JWT")
 @SecurityRequirement(name = "bearerAuth") // Indica que este controller requer um JWT válido
 public class ProtectedTestController {
+    
     @Operation(summary = "Endpoint acessível por qualquer usuário autenticado")
     @GetMapping("/hello")
     public String hello() {

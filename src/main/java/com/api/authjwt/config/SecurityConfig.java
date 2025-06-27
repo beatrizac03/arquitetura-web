@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,6 +20,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 import com.api.authjwt.models.Usuario;
 import com.api.authjwt.repositories.UsuarioRepository;
@@ -35,7 +42,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // UserDetailsService: Como o Spring Security vai carregar os detalhes do usuário
+    // UserDetailsService: Como o Spring Security vai carregar os detalhes do
+    // usuário
     @Bean
     public UserDetailsService userDetailsService(UsuarioRepository userRepository) {
         return username -> userRepository.findByUsername(username)
@@ -47,12 +55,14 @@ public class SecurityConfig {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
     }
 
-    // JwtDecoder: O componente que o Spring Security usa pra decodificar e validar JWTs
+    // JwtDecoder: O componente que o Spring Security usa pra decodificar e validar
+    // JWTs
     @Bean
     public JwtDecoder jwtDecoder() {
         // A chave secreta é convertida pra um SecretKeySpec para HMAC
         SecretKeySpec secretKey = new SecretKeySpec(jwtSecret.getBytes(StandardCharsets.UTF_8), "HmacSha256");
-        // Constrói o NimbusJwtDecoder com a chave secreta. Ele fará a validação da assinatura.
+        // Constrói o NimbusJwtDecoder com a chave secreta. Ele fará a validação da
+        // assinatura.
         return NimbusJwtDecoder.withSecretKey(secretKey).build();
     }
 
@@ -60,24 +70,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(AbstractHttpConfigurer::disable) // Desabilita CSRF pra APIs RESTful stateless
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // API não manterá estado de sessão
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/login").permitAll() // Permite acesso público ao login
-                .requestMatchers("/auth/validate").permitAll() // Permite acesso público ao endpoint de validação
-                .requestMatchers("/h2-console/**").permitAll() // Console H2
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Documentação Swagger
-                .anyRequest().authenticated() // Qualquer outra requisição exige um JWT válido
-            )
-            .headers(headers -> headers.frameOptions(frameOptions -> headers.frameOptions().sameOrigin())) // Necessário para o H2 console
-            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
-                // Ao chamar .jwt(), o Spring Security usará o JwtDecoder que definimos como um Bean.
-            }));
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(withDefaults()) // habilita CORS para usar o corsFilter bean abaixo
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/auth/register").permitAll()
+                        .requestMatchers("/auth/validate").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/produtos").permitAll()
+                        .anyRequest().authenticated())
+                .headers(headers -> headers.frameOptions(frameOptions -> headers.frameOptions().sameOrigin()))
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
+                    // jwt decoder bean já configurado
+                }));
 
         return http.build();
     }
 
-    // CommandLineRunner: Popula o banco de dados H2 com usuários iniciais ao iniciar a aplicação
+    // CommandLineRunner: Popula o banco de dados H2 com usuários iniciais ao
+    // iniciar a aplicação
     @Bean
     public CommandLineRunner initData(UsuarioRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
@@ -92,5 +105,20 @@ public class SecurityConfig {
                 System.out.println("✅ Usuário 'user' criado com senha codificada.");
             }
         };
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*"); // libera todas as origens (melhor que addAllowedOrigin("*") em Spring Boot
+                                             // 2.4+)
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }
