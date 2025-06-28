@@ -1,6 +1,6 @@
 let isProd = location.hostname !== "api.render.com";
 
-let api_url = isProd ? "http://localhost:8080" : "https://www.api.render.com";
+let api_url = isProd ? "http://localhost:8080" : "https://arquitetura-web-c4hp.onrender.com";
 
 export async function logarUsuario(dadosLogin) {
   const requestInit = {

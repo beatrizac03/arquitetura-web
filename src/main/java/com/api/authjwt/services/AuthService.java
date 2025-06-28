@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.api.authjwt.DTOs.UsuarioRequestDto;
 import com.api.authjwt.config.JwtService;
-import com.api.authjwt.mappers.UsuarioMapper;
+// import com.api.authjwt.mappers.UsuarioMapper;
 import com.api.authjwt.models.Usuario;
 import com.api.authjwt.repositories.UsuarioRepository;
 
@@ -19,8 +19,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService; // Injeta o serviço de JWT
 
-    @Autowired
-    private UsuarioMapper usuarioMapper;
+    // @Autowired
+    // private UsuarioMapper usuarioMapper;
 
     public AuthService(UsuarioRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
@@ -54,7 +54,9 @@ public class AuthService {
 
     public String registerUserAndGenerateToken(UsuarioRequestDto dto) {
 
-        Usuario usuario = usuarioMapper.toEntity(dto);
+        Usuario usuario = new Usuario();
+        usuario.setUsername(dto.getUsername());
+        usuario.setRole(dto.getRole());
         usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         userRepository.save(usuario);

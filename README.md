@@ -97,6 +97,13 @@ Ferramenta para criar dashboards customizados a partir de dados do Prometheus.
         3. URL: `http://localhost:9090`
         4. Salvar > Dashboards > Criar Dashboard
         5. Adicione métricas no painel e salve no dashboard
+        
+---
+
+## 🚀 Deploy Render
+
+- Configuração do Dockerfile
+- Disponível em: `https://arquitetura-web-c4hp.onrender.com`
 
 
 

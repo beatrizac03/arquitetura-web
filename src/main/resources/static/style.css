@@ -61,8 +61,6 @@ input[type="password"] {
   padding: 12px 15px;
   border-radius: 8px;
   border: 1.5px solid var(--blue);
-  background: #0b0f0a;
-  color: #b6f27e;
   font-size: 16px;
   transition: border-color 0.3s ease;
 }
@@ -94,7 +92,6 @@ button:hover {
 .footer {
   margin-top: 18px;
   font-size: 13px;
-  color: #4a6a33;
 }
 
 select {
@@ -102,8 +99,6 @@ select {
   padding: 12px 15px;
   border-radius: 8px;
   border: 1.5px solid var(--blue);
-  background-color: #0b0f0a;
-  color: #b6f27e;
   font-size: 16px;
   appearance: none;
   -webkit-appearance: none;
