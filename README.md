@@ -1,6 +1,6 @@
-# 🛒 EasyBuy - API de Autenticação com Monitoramento
+# 🛒 EasyBuy - API de E-commerce
 
-O **EasyBuy** é um sistema de autenticação JWT baseado em Spring Boot com foco em segurança, performance e observabilidade. A aplicação expõe endpoints REST protegidos, utiliza tokens JWT, e oferece um painel completo de monitoramento via Prometheus e Grafana.
+O **EasyBuy** é um sistema de E-commerce com autenticação JWT baseado em Spring Boot com foco em segurança, performance e observabilidade. A aplicação expõe endpoints REST protegidos, utiliza tokens JWT, e oferece um painel completo de monitoramento via Prometheus e Grafana.
 
 ---
 
